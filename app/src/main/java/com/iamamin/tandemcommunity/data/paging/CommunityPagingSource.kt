@@ -2,21 +2,22 @@ package com.iamamin.tandemcommunity.data.paging
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.iamamin.tandemcommunity.data.mapper.toCommunityUser
 import com.iamamin.tandemcommunity.data.remote.CommunityApi
-import com.iamamin.tandemcommunity.data.remote.model.UserDto
+import com.iamamin.tandemcommunity.domain.model.CommunityUser
 
 class CommunityPagingSource(
     private val api: CommunityApi
-) : PagingSource<Int, UserDto>() {
+) : PagingSource<Int, CommunityUser>() {
 
-    override fun getRefreshKey(state: PagingState<Int, UserDto>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, CommunityUser>): Int? {
         return state.anchorPosition?.let { anchor ->
             state.closestPageToPosition(anchor)?.prevKey?.plus(1)
                 ?: state.closestPageToPosition(anchor)?.nextKey?.minus(1)
         }
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, UserDto> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, CommunityUser> {
         val page = params.key ?: 1
 
         return try {
@@ -24,7 +25,7 @@ class CommunityPagingSource(
             val users = response.response
 
             LoadResult.Page(
-                data = users,
+                data = users.map { it.toCommunityUser() },
                 prevKey = if (page == 1) null else page - 1,
                 nextKey = if (users.size < 20) null else page + 1
             )

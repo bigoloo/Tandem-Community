@@ -31,7 +31,7 @@ class CommunityRepositoryImplTest {
 
     @Test
     fun `getCommunityMembers returns a non-null flow`() {
-        assertNotNull(repository.getCommunityMembers())
+        assertNotNull(repository.getCommunityUsers())
     }
 
     @Test
@@ -42,98 +42,98 @@ class CommunityRepositoryImplTest {
 
     @Test
     fun `observeLikedUserIds emits set containing pre-liked user`() = runBlocking {
-        fakeLikedUserDao.like(LikedUserEntity("user1"))
+        fakeLikedUserDao.like(LikedUserEntity(1))
 
         val result = repository.observeLikedUserIds().first()
 
-        assertEquals(setOf("user1"), result)
+        assertEquals(setOf(1), result)
     }
 
     @Test
     fun `observeLikedUserIds emits set containing all pre-liked users`() = runBlocking {
-        fakeLikedUserDao.like(LikedUserEntity("user1"))
-        fakeLikedUserDao.like(LikedUserEntity("user2"))
+        fakeLikedUserDao.like(LikedUserEntity(1))
+        fakeLikedUserDao.like(LikedUserEntity(2))
 
         val result = repository.observeLikedUserIds().first()
 
-        assertEquals(setOf("user1", "user2"), result)
+        assertEquals(setOf(1, 2), result)
     }
 
     @Test
     fun `toggleLike likes a user who is not yet liked`() = runBlocking {
-        repository.toggleLike("user1")
+        repository.toggleLike(1)
 
-        assertTrue(fakeLikedUserDao.isLiked("user1"))
+        assertTrue(fakeLikedUserDao.isLiked(1))
     }
 
     @Test
     fun `toggleLike unlikes a user who is already liked`() = runBlocking {
-        fakeLikedUserDao.like(LikedUserEntity("user1"))
+        fakeLikedUserDao.like(LikedUserEntity(1))
 
-        repository.toggleLike("user1")
+        repository.toggleLike(1)
 
-        assertFalse(fakeLikedUserDao.isLiked("user1"))
+        assertFalse(fakeLikedUserDao.isLiked(1))
     }
 
     @Test
     fun `toggleLike does not affect other liked users when unliking`() = runBlocking {
-        fakeLikedUserDao.like(LikedUserEntity("user1"))
-        fakeLikedUserDao.like(LikedUserEntity("user2"))
+        fakeLikedUserDao.like(LikedUserEntity(1))
+        fakeLikedUserDao.like(LikedUserEntity(2))
 
-        repository.toggleLike("user1")
+        repository.toggleLike(1)
 
-        assertFalse(fakeLikedUserDao.isLiked("user1"))
-        assertTrue(fakeLikedUserDao.isLiked("user2"))
+        assertFalse(fakeLikedUserDao.isLiked(1))
+        assertTrue(fakeLikedUserDao.isLiked(2))
     }
 
     @Test
     fun `toggleLike re-likes a user after being unliked`() = runBlocking {
-        repository.toggleLike("user1") // like
-        repository.toggleLike("user1") // unlike
-        repository.toggleLike("user1") // like again
+        repository.toggleLike(1) // like
+        repository.toggleLike(1) // unlike
+        repository.toggleLike(1) // like again
 
-        assertTrue(fakeLikedUserDao.isLiked("user1"))
+        assertTrue(fakeLikedUserDao.isLiked(1))
     }
 
     @Test
     fun `observeLikedUserIds reflects state after toggleLike`() = runBlocking {
-        repository.toggleLike("user1")
-        repository.toggleLike("user2")
+        repository.toggleLike(1)
+        repository.toggleLike(2)
 
         val result = repository.observeLikedUserIds().first()
 
-        assertEquals(setOf("user1", "user2"), result)
+        assertEquals(setOf(1, 2), result)
     }
 
     @Test
     fun `observeLikedUserIds reflects state after unlike via toggleLike`() = runBlocking {
-        repository.toggleLike("user1")
-        repository.toggleLike("user2")
-        repository.toggleLike("user1")
+        repository.toggleLike(1)
+        repository.toggleLike(2)
+        repository.toggleLike(1)
 
         val result = repository.observeLikedUserIds().first()
 
-        assertEquals(setOf("user2"), result)
+        assertEquals(setOf(2), result)
     }
 }
 
 private class FakeLikedUserDao : LikedUserDao {
 
-    private val likedUsers = MutableStateFlow<List<String>>(emptyList())
+    private val likedUsers = MutableStateFlow<List<Long>>(emptyList())
 
-    override fun observeAll(): Flow<List<String>> = likedUsers
+    override fun observeAll(): Flow<List<Long>> = likedUsers
 
     override suspend fun like(entity: LikedUserEntity) {
         if (!likedUsers.value.contains(entity.userId)) {
-            likedUsers.value = likedUsers.value + entity.userId
+            likedUsers.value += entity.userId
         }
     }
 
-    override suspend fun unlike(userId: String) {
+    override suspend fun unlike(userId: Long) {
         likedUsers.value = likedUsers.value.filter { it != userId }
     }
 
-    override suspend fun isLiked(userId: String): Boolean = likedUsers.value.contains(userId)
+    override suspend fun isLiked(userId: Long): Boolean = likedUsers.value.contains(userId)
 }
 
 private class FakeCommunityApi : CommunityApi {

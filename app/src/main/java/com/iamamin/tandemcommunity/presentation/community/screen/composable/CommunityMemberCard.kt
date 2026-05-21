@@ -23,17 +23,15 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.iamamin.tandemcommunity.data.remote.model.UserDto
+import com.iamamin.tandemcommunity.domain.model.CommunityMember
 import com.iamamin.tandemcommunity.presentation.theme.AppTypography
 import com.iamamin.tandemcommunity.presentation.theme.TandemCommunityTheme
 
 @Composable
 fun CommunityMemberCard(
-    user: UserDto,
-    isLiked: Boolean,
+    member: CommunityMember,
     onLikeClicked: () -> Unit
 ) {
-    val isNew = user.referenceCnt == 0
 
     Card(
         modifier = Modifier.fillMaxWidth(),
@@ -62,10 +60,10 @@ fun CommunityMemberCard(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = user.firstname,
+                        text = member.firstname,
                         style = AppTypography.titleMedium,
                     )
-                    if (isNew) {
+                    if (member.isNew) {
                         Text(
                             text = "NEW",
                             modifier = Modifier
@@ -77,12 +75,6 @@ fun CommunityMemberCard(
                             color = Color.White,
                             style = AppTypography.labelSmall,
                         )
-                    } else {
-                        Text(
-                            text = "${user.referenceCnt}",
-                            style = AppTypography.bodyMedium,
-                            color = Color.Gray
-                        )
                     }
                 }
 
@@ -90,7 +82,7 @@ fun CommunityMemberCard(
 
                 // Topic
                 Text(
-                    text = user.topic,
+                    text = member.topic,
                     style = AppTypography.bodyMedium,
                     color = Color.Gray,
                     maxLines = 2,
@@ -106,16 +98,16 @@ fun CommunityMemberCard(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                        LanguageLabel(label = "NATIVE", languages = user.natives)
-                        LanguageLabel(label = "LEARNS", languages = user.learns)
+                        LanguageLabel(label = "NATIVE", languages = member.natives)
+                        LanguageLabel(label = "LEARNS", languages = member.learns)
                     }
 
                     IconButton(onClick = onLikeClicked, modifier = Modifier.size(32.dp)) {
                         Text(
-                            text = if (isLiked) "\uD83D\uDC4D" else "\uD83D\uDC4D\u200D",
+                            text = if (member.isLiked) "\uD83D\uDC4D" else "\uD83D\uDC4D\u200D",
                             fontSize = 18.sp,
                             // liked = colored thumbs up, default = outline
-                            modifier = if (!isLiked) Modifier.alpha(0.3f) else Modifier
+                            modifier = if (!member.isLiked) Modifier.alpha(0.3f) else Modifier
                         )
                     }
                 }

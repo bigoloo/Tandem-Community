@@ -28,13 +28,13 @@ class CommunityPagingSourceTest {
 
     @Test
     fun `load returns Page with users returned by the api`() = runBlocking {
-        fakeApi.usersToReturn = listOf(fakeUser("1"), fakeUser("2"))
+        fakeApi.usersToReturn = listOf(fakeUser(1), fakeUser(1))
 
         val result = pagingSource.load(refreshParams(key = 1))
 
         assertTrue(result is PagingSource.LoadResult.Page)
         assertEquals(
-            listOf(fakeUser("1"), fakeUser("2")), (result as PagingSource.LoadResult.Page).data
+            listOf(fakeUser(1), fakeUser(1)), (result as PagingSource.LoadResult.Page).data
         )
     }
 
@@ -68,7 +68,7 @@ class CommunityPagingSourceTest {
 
     @Test
     fun `load returns null nextKey when response has fewer than 20 items`() = runBlocking {
-        fakeApi.usersToReturn = List(19) { fakeUser("$it") }
+        fakeApi.usersToReturn = List(19) { fakeUser(it.toLong()) }
 
         val result = pagingSource.load(refreshParams(key = 1)) as PagingSource.LoadResult.Page
 
@@ -86,7 +86,7 @@ class CommunityPagingSourceTest {
 
     @Test
     fun `load returns incremented nextKey when response has exactly 20 items`() = runBlocking {
-        fakeApi.usersToReturn = List(20) { fakeUser("$it") }
+        fakeApi.usersToReturn = List(20) { fakeUser(it.toLong()) }
 
         val result = pagingSource.load(refreshParams(key = 2)) as PagingSource.LoadResult.Page
 
@@ -121,7 +121,7 @@ class CommunityPagingSourceTest {
     @Test
     fun `getRefreshKey returns prevKey plus 1 when closest page has prevKey`() {
         val page = PagingSource.LoadResult.Page(
-            data = listOf(fakeUser("1")), prevKey = 2, nextKey = 4
+            data = listOf(fakeUser(1)), prevKey = 2, nextKey = 4
         )
         val state = PagingState(
             pages = listOf(page),
@@ -136,7 +136,7 @@ class CommunityPagingSourceTest {
     @Test
     fun `getRefreshKey returns nextKey minus 1 when closest page has no prevKey`() {
         val page = PagingSource.LoadResult.Page(
-            data = listOf(fakeUser("1")), prevKey = null, nextKey = 2
+            data = listOf(fakeUser(1)), prevKey = null, nextKey = 2
         )
         val state = PagingState(
             pages = listOf(page),
@@ -155,7 +155,7 @@ class CommunityPagingSourceTest {
         key = key, loadSize = 20, placeholdersEnabled = false
     )
 
-    private fun fakeUser(id: String) = UserDto(
+    private fun fakeUser(id: Long) = UserDto(
         id = id,
         topic = "topic_$id",
         firstname = "User $id",
