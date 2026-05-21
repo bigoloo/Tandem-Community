@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.iamamin.tendemcommunity"
+    namespace = "com.iamamin.tandemcommunity"
     compileSdk {
         version = release(36) {
             minorApiLevel = 1
@@ -12,7 +12,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.iamamin.tendemcommunity"
+        applicationId = "com.iamamin.tandemcommunity"
         minSdk = 29
         targetSdk = 36
         versionCode = 1
@@ -55,4 +55,14 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
+    implementation(libs.androidx.compose.ui.graphics)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.font)
+
+    implementation(platform(libs.koin.bom))
+    implementation(libs.koin.android)
+    api(libs.retrofit)
+    api(libs.kotlinx.serialization.json)
+    api(libs.retrofit.serialization.json)
 }

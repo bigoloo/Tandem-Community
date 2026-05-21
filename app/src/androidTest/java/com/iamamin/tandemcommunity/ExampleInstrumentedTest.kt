@@ -1,4 +1,4 @@
-package com.iamamin.tendemcommunity
+package com.iamamin.tandemcommunity
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

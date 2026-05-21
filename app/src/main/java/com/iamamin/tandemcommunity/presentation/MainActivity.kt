@@ -1,4 +1,4 @@
-package com.iamamin.tendemcommunity
+package com.iamamin.tandemcommunity.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -11,14 +11,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.iamamin.tendemcommunity.ui.theme.TendemCommunityTheme
+import com.iamamin.tandemcommunity.presentation.theme.AppTypography
+import com.iamamin.tandemcommunity.presentation.theme.TandemCommunityTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            TendemCommunityTheme {
+            TandemCommunityTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
                         name = "Android",
@@ -34,14 +35,15 @@ class MainActivity : ComponentActivity() {
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     Text(
         text = "Hello $name!",
-        modifier = modifier
+        modifier = modifier,
+        style = AppTypography.displayMedium
     )
 }
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    TendemCommunityTheme {
+    TandemCommunityTheme {
         Greeting("Android")
     }
 }

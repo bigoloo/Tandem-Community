@@ -1,4 +1,4 @@
-package com.iamamin.tendemcommunity
+package com.iamamin.tandemcommunity
 
 import org.junit.Test
 
