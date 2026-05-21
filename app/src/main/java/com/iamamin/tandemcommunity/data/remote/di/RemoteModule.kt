@@ -1,6 +1,6 @@
 package com.iamamin.tandemcommunity.data.remote.di
 
-import com.iamamin.tandemcommunity.data.remote.CommunityService
+import com.iamamin.tandemcommunity.data.remote.CommunityApi
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import org.koin.dsl.module
@@ -10,7 +10,6 @@ import retrofit2.converter.kotlinx.serialization.asConverterFactory
 val remoteModule = module {
 
     single {
-
         val networkJson = Json { ignoreUnknownKeys = true }
         val contentType = "application/json".toMediaType()
         Retrofit.Builder()
@@ -20,6 +19,6 @@ val remoteModule = module {
     }
 
     single {
-        get<Retrofit>().create(CommunityService::class.java)
+        get<Retrofit>().create(CommunityApi::class.java)
     }
 }
