@@ -6,5 +6,5 @@ import androidx.room3.PrimaryKey
 @Entity(tableName = "liked_users")
 data class LikedUserEntity(
     @PrimaryKey
-    val userId: String
+    val userId: Long
 )

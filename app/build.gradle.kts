@@ -1,7 +1,9 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.room)
 }
 
 android {
@@ -38,6 +40,9 @@ android {
     buildFeatures {
         compose = true
     }
+    room3 {
+        schemaDirectory("$projectDir/schemas")
+    }
 }
 
 dependencies {
@@ -50,6 +55,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.paging.common)
+    implementation(libs.androidx.paging.compose)
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
@@ -64,11 +70,12 @@ dependencies {
 
     implementation(platform(libs.koin.bom))
     implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose)
     api(libs.retrofit)
     api(libs.kotlinx.serialization.json)
     api(libs.retrofit.serialization.json)
 
     implementation(libs.room.runtime)
-    implementation(libs.androidx.sqlite.bundled)
     ksp(libs.room.compiler)
+    implementation(libs.androidx.sqlite.bundled)
 }

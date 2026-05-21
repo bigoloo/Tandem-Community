@@ -1,7 +1,7 @@
 package com.iamamin.tandemcommunity.domain.model
 
 data class CommunityMember(
-    val id: String,
+    val id: Long,
     val firstname: String,
     val topic: String,
     val pictureUrl: String,

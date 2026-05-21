@@ -6,6 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface CommunityRepository {
     fun getCommunityMembers(): Flow<PagingData<UserDto>>
-    fun observeLikedUserIds(): Flow<Set<String>>
-    suspend fun toggleLike(userId: String)
+    fun observeLikedUserIds(): Flow<Set<Long>>
+    suspend fun toggleLike(userId: Long)
 }

@@ -13,9 +13,9 @@ val localModule = module {
             context = androidContext(),
             name = androidContext().getDatabasePath("tandem.db").absolutePath
         )
-            .setDriver(BundledSQLiteDriver())
-            .setQueryCoroutineContext(Dispatchers.IO)
-            .build()
+        .setDriver(BundledSQLiteDriver())
+        .setQueryCoroutineContext(Dispatchers.IO)
+        .build()
     }
 
     single { get<AppDatabase>().likedUserDao() }

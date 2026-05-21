@@ -27,11 +27,11 @@ class CommunityRepositoryImpl(
         ).flow
     }
 
-    override fun observeLikedUserIds(): Flow<Set<String>> {
+    override fun observeLikedUserIds(): Flow<Set<Long>> {
         return likedUserDao.observeAll().map { it.toSet() }
     }
 
-    override suspend fun toggleLike(userId: String) {
+    override suspend fun toggleLike(userId: Long) {
         if (likedUserDao.isLiked(userId)) {
             likedUserDao.unlike(userId)
         } else {
