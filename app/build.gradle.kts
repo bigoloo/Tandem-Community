@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -65,4 +66,8 @@ dependencies {
     api(libs.retrofit)
     api(libs.kotlinx.serialization.json)
     api(libs.retrofit.serialization.json)
+
+    implementation(libs.room.runtime)
+    implementation(libs.androidx.sqlite.bundled)
+    ksp(libs.room.compiler)
 }
