@@ -9,30 +9,33 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewWrapper
 import androidx.compose.ui.unit.dp
 import com.iamamin.tandemcommunity.presentation.theme.AppTypography
 import com.iamamin.tandemcommunity.presentation.theme.TandemCommunityTheme
+import com.iamamin.tandemcommunity.presentation.utils.ThemedPreviewWrapper
 
 @Composable
-fun LanguageLabel(label: String, languages: List<String>) {
+fun LanguageLabel(label: String, language: String) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Text(
             text = label, style = AppTypography.labelSmall, color = Color(0xFF7BC8A4)
         )
         Spacer(modifier = Modifier.width(4.dp))
         Text(
-            text = languages.joinToString(", ") { it.uppercase() },
+            text = language,
             style = AppTypography.labelSmall,
             color = Color.Gray
         )
     }
 }
 
-
-@Preview
+@Preview(showBackground = true)
 @Composable
-fun LanguageLabelPreview() {
-    TandemCommunityTheme {
-        LanguageLabel("Label", languages = listOf("RU", "EN"))
-    }
+@PreviewWrapper(ThemedPreviewWrapper::class)
+private fun LanguageLabelPreview() {
+        LanguageLabel(
+            label = "NATIVE",
+            language = "English"
+        )
 }

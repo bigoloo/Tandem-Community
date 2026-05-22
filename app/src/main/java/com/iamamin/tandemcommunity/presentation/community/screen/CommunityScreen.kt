@@ -39,7 +39,8 @@ fun CommunityScreen(
             when (members.loadState.refresh) {
                 is LoadState.Loading -> {
                     item {
-                        Box(Modifier.fillParentMaxSize(), contentAlignment = Alignment.Center) {
+                        Box(Modifier.fillParentMaxSize(),
+                            contentAlignment = Alignment.Center) {
                             CircularProgressIndicator()
                         }
                     }

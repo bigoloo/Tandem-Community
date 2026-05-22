@@ -35,7 +35,8 @@ import com.iamamin.tandemcommunity.presentation.utils.ThemedPreviewWrapper
 
 @Composable
 fun CommunityMemberCard(
-    member: CommunityMember, onLikeClicked: () -> Unit
+    member: CommunityMember,
+    onLikeClicked: () -> Unit
 ) {
 
     Card(
@@ -44,7 +45,8 @@ fun CommunityMemberCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
     ) {
         Row(
-            modifier = Modifier.padding(12.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)
+            modifier = Modifier.padding(12.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             AsyncImage(
                 model = member.pictureUrl,
@@ -100,8 +102,8 @@ fun CommunityMemberCard(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                        LanguageLabel(label = "NATIVE", languages = member.natives)
-                        LanguageLabel(label = "LEARNS", languages = member.learns)
+                        LanguageLabel(label = "NATIVE", language = member.native)
+                        LanguageLabel(label = "LEARNS", language = member.learn)
                     }
 
                     IconButton(onClick = onLikeClicked, modifier = Modifier.size(32.dp)) {
@@ -128,8 +130,8 @@ private class CommunityMemberCardPreviewPreviewParameterProvider :
                 firstname = "Amin",
                 topic = "I want to learn Android development and share my knowledge about Kotlin.",
                 pictureUrl = "https://tandem2019.web.app/img/pic1.png",
-                natives = listOf("Persian", "English"),
-                learns = listOf("German", "Spanish"),
+                native = "Persian",
+                learn = "German",
                 isNew = true,
                 isLiked = false
             ), CommunityMember(
@@ -137,8 +139,8 @@ private class CommunityMemberCardPreviewPreviewParameterProvider :
                 firstname = "John",
                 topic = "Looking for a language partner to practice Spanish.",
                 pictureUrl = "https://tandem2019.web.app/img/pic2.png",
-                natives = listOf("English"),
-                learns = listOf("Spanish"),
+                native = "English",
+                learn = "Spanish",
                 isNew = false,
                 isLiked = true
             )

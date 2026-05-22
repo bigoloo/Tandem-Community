@@ -5,8 +5,8 @@ data class CommunityMember(
     val firstname: String,
     val topic: String,
     val pictureUrl: String,
-    val natives: List<String>,
-    val learns: List<String>,
+    val native: String,
+    val learn: String,
     val isNew: Boolean,
     val isLiked: Boolean
 )
