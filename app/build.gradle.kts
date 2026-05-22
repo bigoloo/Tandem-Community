@@ -71,9 +71,17 @@ dependencies {
     implementation(platform(libs.koin.bom))
     implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose)
-    api(libs.retrofit)
-    api(libs.kotlinx.serialization.json)
-    api(libs.retrofit.serialization.json)
+    implementation(libs.retrofit)
+    implementation(platform(libs.okhttp.bom))
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging.interceptor)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network)
+
+
+
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.retrofit.serialization.json)
 
     implementation(libs.room.runtime)
     ksp(libs.room.compiler)

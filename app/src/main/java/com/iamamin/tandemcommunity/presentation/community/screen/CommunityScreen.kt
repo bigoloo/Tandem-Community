@@ -74,8 +74,3 @@ fun CommunityScreen(
         }
     }
 }
-
-@Composable
-fun AsyncImage(model: String, contentDescription: String) {
-    ///   TODO("Not yet implemented")
-}

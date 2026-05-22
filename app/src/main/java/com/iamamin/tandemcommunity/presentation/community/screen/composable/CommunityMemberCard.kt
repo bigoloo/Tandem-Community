@@ -18,19 +18,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import androidx.compose.ui.tooling.preview.PreviewWrapper
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil3.compose.AsyncImage
 import com.iamamin.tandemcommunity.domain.model.CommunityMember
 import com.iamamin.tandemcommunity.presentation.theme.AppTypography
-import com.iamamin.tandemcommunity.presentation.theme.TandemCommunityTheme
+import com.iamamin.tandemcommunity.presentation.utils.ThemedPreviewWrapper
 
 @Composable
 fun CommunityMemberCard(
-    member: CommunityMember,
-    onLikeClicked: () -> Unit
+    member: CommunityMember, onLikeClicked: () -> Unit
 ) {
 
     Card(
@@ -39,21 +44,19 @@ fun CommunityMemberCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
     ) {
         Row(
-            modifier = Modifier.padding(12.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+            modifier = Modifier.padding(12.dp), horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            /*   // Profile picture
-               AsyncImage(
-                   model = user.pictureUrl,
-                   contentDescription = "${user.firstname}'s photo",
-                   modifier = Modifier
-                       .size(80.dp)
-                       .clip(RoundedCornerShape(8.dp)),
-                   contentScale = ContentScale.Crop
-               )*/
+            AsyncImage(
+                model = member.pictureUrl,
+                contentDescription = "${member.firstname}'s photo",
+                modifier = Modifier
+                    .size(80.dp)
+                    .clip(RoundedCornerShape(8.dp)),
+                contentScale = ContentScale.Crop
+            )
+
 
             Column(modifier = Modifier.weight(1f)) {
-                // Name + reference count / NEW badge
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -68,8 +71,7 @@ fun CommunityMemberCard(
                             text = "NEW",
                             modifier = Modifier
                                 .background(
-                                    color = Color(0xFF7BC8A4),
-                                    shape = RoundedCornerShape(4.dp)
+                                    color = Color(0xFF7BC8A4), shape = RoundedCornerShape(4.dp)
                                 )
                                 .padding(horizontal = 8.dp, vertical = 2.dp),
                             color = Color.White,
@@ -117,10 +119,40 @@ fun CommunityMemberCard(
 }
 
 
-@Preview
-@Composable
-fun CommunityMemberCardPreview() {
-    TandemCommunityTheme {
+private class CommunityMemberCardPreviewPreviewParameterProvider :
+    PreviewParameterProvider<CommunityMember> {
+    override val values: Sequence<CommunityMember>
+        get() = sequenceOf(
+            CommunityMember(
+                id = 1,
+                firstname = "Amin",
+                topic = "I want to learn Android development and share my knowledge about Kotlin.",
+                pictureUrl = "https://tandem2019.web.app/img/pic1.png",
+                natives = listOf("Persian", "English"),
+                learns = listOf("German", "Spanish"),
+                isNew = true,
+                isLiked = false
+            ), CommunityMember(
+                id = 2,
+                firstname = "John",
+                topic = "Looking for a language partner to practice Spanish.",
+                pictureUrl = "https://tandem2019.web.app/img/pic2.png",
+                natives = listOf("English"),
+                learns = listOf("Spanish"),
+                isNew = false,
+                isLiked = true
+            )
+        )
+}
 
-    }
+@Preview(showBackground = true)
+@Composable
+@PreviewWrapper(ThemedPreviewWrapper::class)
+private fun CommunityMemberCardPreview(
+    @PreviewParameter(CommunityMemberCardPreviewPreviewParameterProvider::class) communityMember: CommunityMember
+) {
+    CommunityMemberCard(
+        member = communityMember,
+        onLikeClicked = {}
+    )
 }
