@@ -19,19 +19,15 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.snapshotFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
-import com.iamamin.tandemcommunity.R
+import com.iamamin.tandemcommunity.presentation.theme.Spacing
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
+import com.iamamin.tandemcommunity.R
 import com.iamamin.tandemcommunity.presentation.community.CommunityViewModel
 import com.iamamin.tandemcommunity.presentation.community.isNoConnectivity
 import com.iamamin.tandemcommunity.presentation.community.screen.composable.CommunityMemberCard
@@ -39,6 +35,8 @@ import com.iamamin.tandemcommunity.presentation.community.screen.composable.Empt
 import com.iamamin.tandemcommunity.presentation.community.screen.composable.ErrorScreen
 import com.iamamin.tandemcommunity.presentation.community.toCommunityMessage
 import com.iamamin.tandemcommunity.presentation.utils.SnackbarEvent.Dismiss
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -123,8 +121,8 @@ fun CommunityScreen(
                         LazyColumn(
                             state = listState,
                             modifier = Modifier.fillMaxSize(),
-                            contentPadding = PaddingValues(16.dp),
-                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                            contentPadding = PaddingValues(Spacing.lg),
+                            verticalArrangement = Arrangement.spacedBy(Spacing.sm)
                         ) {
                             items(
                                 count = members.itemCount,
@@ -145,7 +143,7 @@ fun CommunityScreen(
                                         contentAlignment = Alignment.Center
                                     ) {
                                         CircularProgressIndicator(
-                                            modifier = Modifier.padding(16.dp)
+                                            modifier = Modifier.padding(Spacing.lg)
                                         )
                                     }
                                 }

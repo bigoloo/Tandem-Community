@@ -39,7 +39,7 @@ fun EmptyContent(modifier: Modifier = Modifier) {
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, apiLevel = 34)
 @PreviewWrapper(ThemedPreviewWrapper::class)
 @Composable
 private fun EmptyContentPreview() {

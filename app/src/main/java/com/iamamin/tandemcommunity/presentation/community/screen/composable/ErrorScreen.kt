@@ -27,9 +27,9 @@ import com.iamamin.tandemcommunity.presentation.utils.ThemedPreviewWrapper
 @Composable
 fun ErrorScreen(
     message: String,
+    modifier: Modifier = Modifier,
     showSettingsButton: Boolean = false,
     onRetry: () -> Unit,
-    modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
 
@@ -61,7 +61,7 @@ fun ErrorScreen(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, apiLevel = 34)
 @PreviewWrapper(ThemedPreviewWrapper::class)
 @Composable
 private fun ErrorScreenConnectivityPreview() {
@@ -72,7 +72,7 @@ private fun ErrorScreenConnectivityPreview() {
     )
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, apiLevel = 34)
 @PreviewWrapper(ThemedPreviewWrapper::class)
 @Composable
 private fun ErrorScreenHttpPreview() {
