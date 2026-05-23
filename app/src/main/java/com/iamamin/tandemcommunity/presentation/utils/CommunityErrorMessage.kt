@@ -1,4 +1,4 @@
-package com.iamamin.tandemcommunity.presentation.community
+package com.iamamin.tandemcommunity.presentation.utils
 
 import android.content.Context
 import com.iamamin.tandemcommunity.R

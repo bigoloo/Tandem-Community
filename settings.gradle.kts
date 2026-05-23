@@ -22,6 +22,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Tendem Community"
+rootProject.name = "Tandem Community"
 include(":app")
  

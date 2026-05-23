@@ -29,11 +29,11 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import com.iamamin.tandemcommunity.R
 import com.iamamin.tandemcommunity.presentation.community.CommunityViewModel
-import com.iamamin.tandemcommunity.presentation.community.isNoConnectivity
+import com.iamamin.tandemcommunity.presentation.utils.isNoConnectivity
 import com.iamamin.tandemcommunity.presentation.community.screen.composable.CommunityMemberCard
 import com.iamamin.tandemcommunity.presentation.community.screen.composable.EmptyContent
 import com.iamamin.tandemcommunity.presentation.community.screen.composable.ErrorScreen
-import com.iamamin.tandemcommunity.presentation.community.toCommunityMessage
+import com.iamamin.tandemcommunity.presentation.utils.toCommunityMessage
 import com.iamamin.tandemcommunity.presentation.utils.SnackbarEvent.Dismiss
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
