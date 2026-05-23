@@ -15,7 +15,8 @@ class GetCommunityMembersUseCase(
     private val likedRepository: LikedRepository
 ) {
     operator fun invoke(scope: CoroutineScope): Flow<PagingData<CommunityMember>> {
-        return communityRepository.getCommunityUsers().cachedIn(scope)
+        return communityRepository.getCommunityUsers()
+            .cachedIn(scope)
             .combine(likedRepository.observeLikedUserIds()) { pagingData, likedIds ->
                 pagingData.map { user ->
                     CommunityMember(
