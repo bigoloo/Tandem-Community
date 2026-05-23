@@ -11,6 +11,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material.icons.outlined.ThumbUp
@@ -20,10 +24,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -118,6 +124,23 @@ fun CommunityMemberCard(
                         )
                     }
 
+                    val likeScale by animateFloatAsState(
+                        targetValue = if (member.isLiked) 1f else 0.85f,
+                        animationSpec = spring(
+                            dampingRatio = Spring.DampingRatioMediumBouncy,
+                            stiffness = Spring.StiffnessMedium
+                        ),
+                        label = "likeScale"
+                    )
+                    val likeTint by animateColorAsState(
+                        targetValue = if (member.isLiked) {
+                            MaterialTheme.colorScheme.primary
+                        } else {
+                            MaterialTheme.colorScheme.onSurfaceVariant
+                        },
+                        label = "likeTint"
+                    )
+
                     IconButton(
                         onClick = onLikeClicked,
                         modifier = Modifier.size(Dimens.likeButtonSize)
@@ -129,18 +152,12 @@ fun CommunityMemberCard(
                                 Icons.Outlined.ThumbUp
                             },
                             contentDescription = stringResource(
-                                if (member.isLiked) {
-                                    R.string.action_unlike
-                                } else {
-                                    R.string.action_like
-                                }
+                                if (member.isLiked) R.string.action_unlike else R.string.action_like
                             ),
-                            tint = if (member.isLiked) {
-                                MaterialTheme.colorScheme.primary
-                            } else {
-                                MaterialTheme.colorScheme.onSurfaceVariant
-                            },
-                            modifier = Modifier.size(Dimens.likeIconSize)
+                            tint = likeTint,
+                            modifier = Modifier
+                                .size(Dimens.likeIconSize)
+                                .scale(likeScale)
                         )
                     }
                 }
