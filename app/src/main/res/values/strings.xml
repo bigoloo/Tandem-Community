@@ -1,3 +1,23 @@
 <resources>
     <string name="app_name">Tandem Community</string>
+
+    <!-- Empty state -->
+    <string name="empty_no_members">No members found</string>
+    <string name="empty_check_back">Check back later</string>
+
+    <!-- Actions -->
+    <string name="action_retry">Retry</string>
+    <string name="action_open_settings">Open Settings</string>
+
+    <!-- Community member card -->
+    <string name="member_photo_description">%1$s\'s photo</string>
+    <string name="badge_new">NEW</string>
+    <string name="language_native">NATIVE</string>
+    <string name="language_learns">LEARNS</string>
+
+    <!-- Error messages -->
+    <string name="error_no_connectivity">No internet connection</string>
+    <string name="error_timeout">Request timed out</string>
+    <string name="error_http">Server error (%1$d)</string>
+    <string name="error_unknown">Something went wrong</string>
 </resources>

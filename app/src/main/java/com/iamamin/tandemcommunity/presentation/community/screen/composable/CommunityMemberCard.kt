@@ -23,6 +23,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -31,6 +32,7 @@ import androidx.compose.ui.tooling.preview.PreviewWrapper
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
+import com.iamamin.tandemcommunity.R
 import com.iamamin.tandemcommunity.domain.model.CommunityMember
 import com.iamamin.tandemcommunity.presentation.theme.AppTypography
 import com.iamamin.tandemcommunity.presentation.utils.ThemedPreviewWrapper
@@ -52,7 +54,7 @@ fun CommunityMemberCard(
         ) {
             AsyncImage(
                 model = member.pictureUrl,
-                contentDescription = "${member.firstname}'s photo",
+                contentDescription = stringResource(R.string.member_photo_description, member.firstname),
                 modifier = Modifier
                     .size(80.dp)
                     .clip(RoundedCornerShape(8.dp)),
@@ -72,7 +74,7 @@ fun CommunityMemberCard(
                     )
                     if (member.isNew) {
                         Text(
-                            text = "NEW",
+                            text = stringResource(R.string.badge_new),
                             modifier = Modifier
                                 .background(
                                     color = Color(0xFF7BC8A4), shape = RoundedCornerShape(4.dp)
@@ -104,8 +106,8 @@ fun CommunityMemberCard(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                        LanguageLabel(label = "NATIVE", language = member.native)
-                        LanguageLabel(label = "LEARNS", language = member.learn)
+                        LanguageLabel(label = stringResource(R.string.language_native), language = member.native)
+                        LanguageLabel(label = stringResource(R.string.language_learns), language = member.learn)
                     }
 
                     IconButton(onClick = onLikeClicked, modifier = Modifier.size(32.dp)) {

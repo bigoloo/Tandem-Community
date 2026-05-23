@@ -20,10 +20,16 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.snapshotFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
+import com.iamamin.tandemcommunity.R
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import com.iamamin.tandemcommunity.presentation.community.CommunityViewModel
@@ -33,7 +39,6 @@ import com.iamamin.tandemcommunity.presentation.community.screen.composable.Empt
 import com.iamamin.tandemcommunity.presentation.community.screen.composable.ErrorScreen
 import com.iamamin.tandemcommunity.presentation.community.toCommunityMessage
 import com.iamamin.tandemcommunity.presentation.utils.SnackbarEvent.Dismiss
-import com.iamamin.tandemcommunity.presentation.utils.SnackbarEvent.Show
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -43,25 +48,26 @@ fun CommunityScreen(
     val members = viewModel.members.collectAsLazyPagingItems()
     val snackbarHostState = remember { SnackbarHostState() }
     val listState = rememberLazyListState()
-
-    LaunchedEffect(members.loadState.append) {
-        val appendState = members.loadState.append
-        if (appendState is LoadState.Error) {
-            val result = snackbarHostState.showSnackbar(
-                message = appendState.error.toCommunityMessage(),
-                actionLabel = "Retry",
-                duration = SnackbarDuration.Indefinite
-            )
-            if (result == SnackbarResult.ActionPerformed) {
-                members.retry()
-            }
-        }
-    }
+    val context = LocalContext.current
 
     LaunchedEffect(Unit) {
+        launch {
+            snapshotFlow { members.loadState.append }
+                .collectLatest { appendState ->
+                    if (appendState is LoadState.Error) {
+                        val result = snackbarHostState.showSnackbar(
+                            message = appendState.error.toCommunityMessage(context),
+                            actionLabel = context.getString(R.string.action_retry),
+                            duration = SnackbarDuration.Indefinite
+                        )
+                        if (result == SnackbarResult.ActionPerformed) {
+                            members.retry()
+                        }
+                    }
+                }
+        }
         viewModel.snackbarEvent.collect { event ->
             when (event) {
-                is Show -> snackbarHostState.showSnackbar(event.message)
                 is Dismiss -> {
                     snackbarHostState.currentSnackbarData?.dismiss()
                     when {
@@ -101,7 +107,7 @@ fun CommunityScreen(
 
                 is LoadState.Error -> {
                     ErrorScreen(
-                        message = refreshState.error.toCommunityMessage(),
+                        message = refreshState.error.toCommunityMessage(context),
                         showSettingsButton = refreshState.error.isNoConnectivity(),
                         onRetry = { members.refresh() },
                         modifier = Modifier

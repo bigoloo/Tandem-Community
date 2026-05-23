@@ -16,10 +16,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewWrapper
 import androidx.compose.ui.unit.dp
+import com.iamamin.tandemcommunity.R
 import com.iamamin.tandemcommunity.presentation.utils.ThemedPreviewWrapper
 
 @Composable
@@ -44,7 +46,7 @@ fun ErrorScreen(
         Spacer(Modifier.height(16.dp))
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             Button(onClick = onRetry) {
-                Text("Retry")
+                Text(stringResource(R.string.action_retry))
             }
             if (showSettingsButton) {
                 OutlinedButton(
@@ -52,7 +54,7 @@ fun ErrorScreen(
                         context.startActivity(Intent(Settings.ACTION_WIRELESS_SETTINGS))
                     }
                 ) {
-                    Text("Open Settings")
+                    Text(stringResource(R.string.action_open_settings))
                 }
             }
         }
