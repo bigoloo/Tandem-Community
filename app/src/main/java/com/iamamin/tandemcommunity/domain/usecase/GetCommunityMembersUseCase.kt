@@ -12,10 +12,11 @@ import kotlinx.coroutines.flow.combine
 
 class GetCommunityMembersUseCase(
     private val communityRepository: CommunityRepository,
-    private val likedRepository: LikedRepository
+    private val likedRepository: LikedRepository,
 ) {
     operator fun invoke(scope: CoroutineScope): Flow<PagingData<CommunityMember>> {
-        return communityRepository.getCommunityUsers()
+        return communityRepository
+            .getCommunityUsers()
             .cachedIn(scope)
             .combine(likedRepository.observeLikedUserIds()) { pagingData, likedIds ->
                 pagingData.map { user ->

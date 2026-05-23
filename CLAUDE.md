@@ -60,4 +60,4 @@ There are two distinct error paths from `CommunityPagingSource`:
 
 ## Testing Conventions
 
-Unit tests use JUnit 4 with hand-written fakes (no mocking library). See `FakeCommunityApi` in `CommunityPagingSourceTest` as the pattern — implement the interface directly and expose mutable state (`usersToReturn`, `shouldThrow`) rather than using Mockito/MockK.
+Using mockk 
