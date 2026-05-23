@@ -6,6 +6,10 @@ import org.koin.dsl.module
 
 val uiModel = module {
     viewModel {
-        CommunityViewModel(getCommunityMembersUseCase = get(), toggleLikeUseCase = get())
+        CommunityViewModel(
+            getCommunityMembersUseCase = get(),
+            toggleLikeUseCase = get(),
+            connectivityObserver = get()
+        )
     }
 }

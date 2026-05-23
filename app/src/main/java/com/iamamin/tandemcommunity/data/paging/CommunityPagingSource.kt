@@ -5,6 +5,11 @@ import androidx.paging.PagingState
 import com.iamamin.tandemcommunity.data.mapper.toCommunityUser
 import com.iamamin.tandemcommunity.data.remote.CommunityApi
 import com.iamamin.tandemcommunity.domain.model.CommunityUser
+import com.iamamin.tandemcommunity.domain.model.error.CommunityError
+import kotlinx.coroutines.CancellationException
+import retrofit2.HttpException
+import java.io.IOException
+import java.net.SocketTimeoutException
 
 class CommunityPagingSource(
     private val api: CommunityApi
@@ -29,9 +34,16 @@ class CommunityPagingSource(
                 prevKey = if (page == 1) null else page - 1,
                 nextKey = if (users.size < 20) null else page + 1
             )
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: HttpException) {
+            LoadResult.Error(CommunityError.HttpError(e.code()))
+        } catch (e: SocketTimeoutException) {
+            LoadResult.Error(CommunityError.Timeout)
+        } catch (e: IOException) {
+            LoadResult.Error(CommunityError.NoConnectivity)
         } catch (e: Exception) {
-            e.printStackTrace()
-            LoadResult.Error(e)
+            LoadResult.Error(CommunityError.Unknown(e))
         }
     }
 }

@@ -15,10 +15,7 @@ class CommunityRepositoryImpl(
 
     override fun getCommunityUsers(): Flow<PagingData<CommunityUser>> {
         return Pager(
-            config = PagingConfig(
-                pageSize = 20,
-                enablePlaceholders = false
-            ),
+            config = PagingConfig(pageSize = 20, enablePlaceholders = false),
             pagingSourceFactory = { CommunityPagingSource(api) }
         ).flow
     }
