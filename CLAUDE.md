@@ -50,6 +50,43 @@ There are two distinct error paths from `CommunityPagingSource`:
 
 `CommunityViewModel` observes `ConnectivityObserver.isConnected` with `.drop(1).filter { it }` to detect reconnection events (skipping the initial emission). On reconnect, `CommunityScreen` auto-refreshes or retries depending on whether the current error is a refresh or append failure.
 
+## UI Design System
+
+All colors, spacing, and dimensions come from the theme — never use hardcoded `dp` literals.
+
+**Colors & typography** — always use `MaterialTheme.colorScheme.*` and `MaterialTheme.typography.*`.
+
+**Spacing** (`presentation/theme/Spacing.kt`) — use for padding, gaps, and spacers:
+
+| Token | Value |
+|-------|-------|
+| `Spacing.xxs` | 2dp |
+| `Spacing.xs` | 4dp |
+| `Spacing.sm` | 8dp |
+| `Spacing.md` | 12dp |
+| `Spacing.lg` | 16dp |
+| `Spacing.xl` | 24dp |
+
+**Dimens** (`presentation/theme/Dimens.kt`) — use for component-specific sizes:
+
+| Token | Value | Use |
+|-------|-------|-----|
+| `Dimens.avatarSize` | 80dp | Profile image |
+| `Dimens.avatarCornerRadius` | 8dp | Avatar clip |
+| `Dimens.badgeCornerRadius` | 4dp | Language badge |
+| `Dimens.likeButtonSize` | 32dp | Like button touch target |
+| `Dimens.likeIconSize` | 20dp | Like icon |
+| `Dimens.cardElevation` | 1dp | Member card shadow |
+
+**Compose Previews** — wrap every `@Preview` with `@PreviewWrapper(ThemedPreviewWrapper::class)` so previews always render inside `TandemCommunityTheme`. Use `apiLevel = 34`.
+
+```kotlin
+@Preview(showBackground = true, apiLevel = 34)
+@PreviewWrapper(ThemedPreviewWrapper::class)
+@Composable
+private fun MyComposablePreview() { ... }
+```
+
 ## Tech Stack
 
 - **Networking**: Retrofit 3 + OkHttp 5 + `kotlinx.serialization` (JSON converter)
@@ -60,4 +97,28 @@ There are two distinct error paths from `CommunityPagingSource`:
 
 ## Testing Conventions
 
-Using mockk 
+**Framework**: mockk for mocking. JUnit 4 (`@Test`, `@Before`). Use `runTest` for coroutines; use `runBlocking` only for direct `suspend` calls that don't need a `TestScope` (e.g. `PagingSource.load()`).
+
+**Test names**: backtick strings describing what + when. Example: `` `load returns NoConnectivity error when api throws IOException` ``.
+
+**Structure**: group related tests under `// region <method>()` / `// endregion` comments. Put fake data builders in a `// region helpers` block at the bottom.
+
+**Fakes**: each test file defines its own private `fakeXxx()` / `xFixture()` builder functions returning minimal valid objects — do not share fake builders across files.
+
+**Paging tests** — use `paging-testing`'s `asSnapshot()` to collect a `Flow<PagingData<T>>` into a plain list. Repository tests call `scrollTo(index)` inside the lambda to trigger multi-page loads. Use case tests pass `backgroundScope` (from `runTest`) as the scope argument to the use case.
+
+```kotlin
+// Repository
+val items = repository.getCommunityUsers().asSnapshot { scrollTo(20) }
+
+// Use case (requires UnconfinedTestDispatcher)
+@OptIn(ExperimentalCoroutinesApi::class)
+fun `...`() = runTest(UnconfinedTestDispatcher()) {
+    val result = useCase(backgroundScope).asSnapshot()
+}
+```
+
+**Layer conventions**:
+- *Data layer* — mock the API/DAO, test the repository/paging source logic directly (no DI container).
+- *Domain layer* — mock repository interfaces, test use case logic. Simple delegation tests use `mockk(relaxed = true)` and `coVerify`.
+- *Presentation layer* — no UI tests currently; ViewModel logic is covered indirectly via use case tests.
