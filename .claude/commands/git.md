@@ -10,8 +10,8 @@
 ```
 main (trunk)
   │
-  ├── feat/home-weight-card  ← short-lived, < 2 days
-  ├── fix/pomodoro-crash      ← short-lived, < 1 day
+  ├── feature/add-feature  ← short-lived, < 2 days
+  ├── fix/bugfixes      ← short-lived, < 1 day
   └── release/1.2.0           ← cut from trunk at release time
 ```
 
@@ -39,15 +39,6 @@ main (trunk)
 | `release/`  | Until patched   | Cut from `main` at release time (e.g. `release/1.2.0`) |
 | `hotfix/`   | Hours           | Emergency patch on a live `release/` branch         |
 
-**Examples:**
-```bash
-feat/home-weight-summary
-fix/pomodoro-timer-reset
-refactor/gym-viewmodel-extract
-chore/update-compose-1.7
-release/1.2.0
-hotfix/1.2.1-crash-on-launch
-```
 
 Rules:
 - **kebab-case**, lowercase
@@ -97,134 +88,21 @@ In trunk-based development, each commit to `main` must be **self-contained and s
 
 ### Types
 
-| Type         | Appears in changelog | Bumps version  | When to use                              |
-|--------------|----------------------|----------------|------------------------------------------|
-| `feat`       | ✅ Yes                | Minor          | New user-facing capability               |
-| `fix`        | ✅ Yes                | Patch          | Bug fix visible to user                  |
-| `perf`       | ✅ Yes                | Patch          | Performance improvement                  |
-| `refactor`   | ❌ No                 | —              | Code change, no behavior change          |
-| `chore`      | ❌ No                 | —              | Build, deps, tooling, config             |
-| `docs`       | ❌ No                 | —              | Documentation only                       |
-| `test`       | ❌ No                 | —              | Adding or fixing tests                   |
-| `style`      | ❌ No                 | —              | Formatting, lint fixes                   |
-| `ci`         | ❌ No                 | —              | CI/CD changes                            |
-| `revert`     | ✅ Yes                | Patch          | Reverts a previous commit                |
+| Type       | Appears in changelog | Bumps version  | When to use                              |
+|------------|----------------------|----------------|------------------------------------------|
+| `feature`  | ✅ Yes                | Minor          | New user-facing capability               |
+| `fix`      | ✅ Yes                | Patch          | Bug fix visible to user                  |
+| `perf`     | ✅ Yes                | Patch          | Performance improvement                  |
+| `refactor` | ❌ No                 | —              | Code change, no behavior change          |
+| `chore`    | ❌ No                 | —              | Build, deps, tooling, config             |
+| `docs`     | ❌ No                 | —              | Documentation only                       |
+| `test`     | ❌ No                 | —              | Adding or fixing tests                   |
+| `style`    | ❌ No                 | —              | Formatting, lint fixes                   |
+| `ci`       | ❌ No                 | —              | CI/CD changes                            |
+| `revert`   | ✅ Yes                | Patch          | Reverts a previous commit                |
 
 Use `BREAKING CHANGE:` in the footer to bump the **Major** version.
 
-### Scopes (module names)
-`home` | `weight` | `pomodoro` | `gym` | `compose-app` | `server` | `core-nav` | `design-system` | `ci` | `deps`
-
-### Examples
-
-**Feature (lands behind feature flag):**
-```
-feat(home): add daily weight summary card
-
-Shows today's weight entry in a compact card on the Home screen.
-Card is hidden behind FeatureFlags.weightSummaryCard until QA sign-off.
-
-Closes #14
-```
-
-**Bug fix (safe to ship immediately):**
-```
-fix(pomodoro): prevent timer from resetting on recomposition
-
-LaunchedEffect was re-triggering because the lambda key was unstable.
-Changed to rememberSaveable to survive recomposition and config change.
-```
-
-**Dependency update:**
-```
-chore(deps): update compose-multiplatform to 1.7.0
-
-Picks up stability fixes for iOS touch handling and lazy list performance.
-```
-
-**Breaking change:**
-```
-refactor(core-nav): remove legacy NavGraph builder API
-
-Replaced with type-safe routes using @Serializable. All feature modules
-updated. No UI or behavior change.
-
-BREAKING CHANGE: NavGraphBuilder.featureGraph() extension removed.
-Migrate to composable<FeatureRoute> { } syntax.
-```
-
-**Hotfix on a release branch:**
-```
-fix(compose-app): prevent NPE on cold start when user has no weight data
-
-Null check missing in WeightSummaryCard when items list is empty.
-Cherry-picked from main (commit abc1234).
-
-Closes #67
-```
-
-### Rules
-- Imperative mood: "add" not "added" / "adds"
-- Summary ≤ 72 characters, no trailing period
-- Body explains **why** — the diff explains what
-- Every commit to `main` must pass `./gradlew test lint`
-
----
-
-## Day-to-Day Workflow
-
-```bash
-# 1. Sync trunk before starting anything
-git checkout main && git pull --rebase
-
-# 2. Cut a short-lived branch
-git checkout -b fix/pomodoro-timer-reset
-
-# 3. Make small, focused commits
-git add -p   # Stage hunks, not whole files — stay focused
-git commit -m "fix(pomodoro): prevent timer reset on recomposition"
-
-# 4. Sync with trunk before pushing (rebase, not merge)
-git fetch origin && git rebase origin/main
-
-# 5. Push and open PR
-git push -u origin fix/pomodoro-timer-reset
-
-# 6. After PR merges — delete the branch
-git branch -d fix/pomodoro-timer-reset
-git push origin --delete fix/pomodoro-timer-reset
-```
-
----
-
-## Release Process (trunk-based)
-
-```bash
-# 1. Cut release branch from a known-good trunk commit
-git checkout main
-git checkout -b release/1.2.0
-git push -u origin release/1.2.0
-
-# 2. Tag the release
-git tag -a v1.2.0 -m "Release 1.2.0" && git push origin v1.2.0
-
-# 3. Emergency hotfix on a live release
-git checkout release/1.2.0
-git checkout -b hotfix/1.2.1-crash-on-launch
-# ... fix ...
-git commit -m "fix(compose-app): prevent NPE on cold start"
-# Merge hotfix into release branch, then tag
-git checkout release/1.2.0
-git merge hotfix/1.2.1-crash-on-launch
-git tag -a v1.2.1 -m "Hotfix 1.2.1" && git push origin v1.2.1
-
-# 4. Cherry-pick the hotfix back to main
-git checkout main
-git cherry-pick <hotfix-commit-sha>
-git push
-```
-
----
 
 ## Pull Request Guidelines
 
@@ -235,7 +113,7 @@ git push
 - CI must be green before merge — no exceptions
 
 ### PR Title
-Same format as a commit: `fix(pomodoro): prevent timer from resetting on recomposition`
+Same format as a commit: `fix(paging): fixing crash for retry`
 
 ### PR Description Template
 ```markdown
@@ -299,8 +177,8 @@ git bisect good v1.1.0
 ## When AI is Asked to Work with Git
 
 - **Create branch name** → Use `<type>/<short-description>`, trunk-based rules (short-lived)
-- **Write commit message** → Conventional Commits; check if the change is `feat`, `fix`, or `chore` by what it does, not what was requested
+- **Write commit message** → Conventional Commits; check if the change is `feature`, `fix`, or `chore` by what it does, not what was requested
 - **Review a diff** → Flag: MVI violations, `!!` usage, missing tests, business logic in Composables, any change that could break trunk
 - **Large feature spanning > 2 days** → Suggest feature flag approach instead of long-lived branch
-- **Generate changelog** → Include `feat`, `fix`, `perf`, `revert`; group by module scope; exclude `chore`, `docs`, `test`, `style`, `ci`
+- **Generate changelog** → Include `feature`, `fix`, `perf`, `revert`; group by module scope; exclude `chore`, `docs`, `test`, `style`, `ci`
 - **Hotfix** → Always cherry-pick back to `main` after patching the release branch
