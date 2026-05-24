@@ -11,7 +11,6 @@ composeBom = "2026.05.01"
 koin-bom = "4.2.1"
 appcompat = "1.7.1"
 material = "1.14.0"
-font = "1.11.2"
 retrofit = "3.0.0"
 kotlinx-serialization = "1.11.0"
 room = "3.0.0-alpha05"
@@ -41,7 +40,6 @@ androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-
 androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-compose-material-icons-core = { group = "androidx.compose.material", name = "material-icons-core" }
-androidx-compose-font = { group = "androidx.compose.ui", name = "ui-text-google-fonts", version.ref = "font" }
 androidx-compose-material3-adaptive-navigation-suite = { group = "androidx.compose.material3", name = "material3-adaptive-navigation-suite" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
