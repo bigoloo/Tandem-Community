@@ -213,7 +213,6 @@ All values come from the theme — no hardcoded `dp` literals or color hex value
 -  **Offline-first** — cache the community feed in Room so content is available without connectivity
 
 ### Engineering
--  **UI / screenshot tests** — Compose `ComposeTestRule` or Paparazzi for visual regression
 -  **CI improvements** — upload test results as artifacts; add coverage reporting
 -  **Baseline profiles** — generate a Baseline Profile to reduce startup jank
 -  **Production analytics backend** — swap `LogcatEventLogger` for a real analytics implementation (Firebase, Mixpanel, etc.) behind the same `EventLogger` interface

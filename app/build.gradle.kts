@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.room)
     alias(libs.plugins.detekt)
+    alias(libs.plugins.kover)
 }
 
 detekt {
@@ -48,6 +49,28 @@ android {
     }
     room3 {
         schemaDirectory("$projectDir/schemas")
+    }
+}
+
+kover {
+    reports {
+        filters {
+            excludes {
+                classes(
+                    // Koin DI modules — wiring only, no business logic
+                    "**.di.**",
+                    // App and Activity entry points
+                    "**.TandemCommunityApplication",
+                    "**.MainActivity",
+                    // Compose UI composables — covered by UI tests, not unit tests
+                    "**.screen.**",
+                    // Design system — no logic
+                    "**.theme.**",
+                    // Room entities — plain data holders
+                    "**.entity.**",
+                )
+            }
+        }
     }
 }
 

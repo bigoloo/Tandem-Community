@@ -35,6 +35,9 @@ jobs:
   unit-tests:
     name: Unit Tests
     runs-on: ubuntu-latest
+    permissions:
+      checks: write
+      pull-requests: write
 
     steps:
       - uses: actions/checkout@v4
@@ -46,15 +49,39 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v3
 
-      - name: Run unit tests
-        run: ./gradlew test
+      - name: Run unit tests with coverage
+        run: ./gradlew testDebugUnitTest koverXmlReport koverHtmlReport
 
-      - name: Upload unit test results
+      - name: Upload test reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: unit-test-results
-          path: app/build/reports/tests/
+          path: |
+            app/build/reports/tests/
+            app/build/test-results/
+
+      - name: Publish test results
+        if: always()
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        with:
+          files: app/build/test-results/**/*.xml
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: |
+            app/build/reports/kover/report.xml
+            app/build/reports/kover/html/
+
+      - name: Post coverage comment
+        if: github.event_name == 'pull_request'
+        uses: mi-kas/kover-report@v1
+        with:
+          path: ${{ github.workspace }}/app/build/reports/kover/report.xml
+          title: Code Coverage
+          update-comment: true
 
   instrumented-tests:
     name: Instrumented Tests
