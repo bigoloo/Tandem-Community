@@ -7,6 +7,7 @@ complexity:
     threshold: 15
   LongMethod:
     threshold: 60
+    excludes: ['**/presentation/**']
   LongParameterList:
     functionThreshold: 8
     constructorThreshold: 8
@@ -18,9 +19,9 @@ complexity:
 naming:
   active: true
   FunctionNaming:
-    # Compose @Composable functions are PascalCase by convention
+    # Compose @Composable functions are PascalCase; test backtick names are exempt
     functionPattern: '[a-z][a-zA-Z0-9]*'
-    excludes: ['**/presentation/**']
+    excludes: ['**/presentation/**', '**/test/**', '**/androidTest/**']
   TopLevelPropertyNaming:
     constantPattern: '[A-Z][_A-Z0-9]*'
     propertyPattern: '[a-z][a-zA-Z0-9]*'
@@ -36,6 +37,7 @@ style:
     max: 3
   UnusedPrivateMember:
     active: true
+    ignoreAnnotated: ['Preview']
 
 coroutines:
   active: true

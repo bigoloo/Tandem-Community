@@ -1,7 +1,9 @@
 package com.iamamin.tandemcommunity.presentation.theme
 
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.unit.dp
 
+@Immutable
 object Spacing {
     val xxs = 2.dp
     val xs = 4.dp

@@ -154,7 +154,7 @@ class CommunityPagingSourceTest {
         var caughtCancellation = false
         try {
             pagingSource.load(refreshParams(key = 1))
-        } catch (e: CancellationException) {
+        } catch (_: CancellationException) {
             caughtCancellation = true
         }
 

@@ -22,6 +22,7 @@ class CommunityPagingSource(
         }
     }
 
+    @Suppress("TooGenericExceptionCaught")
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, CommunityUser> {
         val page = params.key ?: 1
 
@@ -38,9 +39,9 @@ class CommunityPagingSource(
             throw e
         } catch (e: HttpException) {
             LoadResult.Error(CommunityError.HttpError(e.code()))
-        } catch (e: SocketTimeoutException) {
+        } catch (_: SocketTimeoutException) {
             LoadResult.Error(CommunityError.Timeout)
-        } catch (e: IOException) {
+        } catch (_: IOException) {
             LoadResult.Error(CommunityError.NoConnectivity)
         } catch (e: Exception) {
             LoadResult.Error(CommunityError.Unknown(e))

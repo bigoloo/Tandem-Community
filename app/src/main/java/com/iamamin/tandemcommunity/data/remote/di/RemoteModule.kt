@@ -10,6 +10,9 @@ import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import java.util.concurrent.TimeUnit
 
+private const val CONNECT_TIMEOUT_SECONDS = 3L
+private const val WRITE_TIMEOUT_SECONDS = 25L
+
 val remoteModule = module {
 
     single {
@@ -19,9 +22,9 @@ val remoteModule = module {
         }
         val client = OkHttpClient.Builder().apply {
             this.addInterceptor(intercepter)
-                .connectTimeout(3, TimeUnit.SECONDS)
+                .connectTimeout(CONNECT_TIMEOUT_SECONDS, TimeUnit.SECONDS)
                 .readTimeout(20, TimeUnit.SECONDS)
-                .writeTimeout(25, TimeUnit.SECONDS)
+                .writeTimeout(WRITE_TIMEOUT_SECONDS, TimeUnit.SECONDS)
 
         }.build()
         val networkJson = Json { ignoreUnknownKeys = true }
