@@ -3,6 +3,8 @@ package com.iamamin.tandemcommunity.presentation.community
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
+import com.iamamin.tandemcommunity.domain.analytics.AppEvent
+import com.iamamin.tandemcommunity.domain.analytics.EventLogger
 import com.iamamin.tandemcommunity.domain.connectivity.ConnectivityObserver
 import com.iamamin.tandemcommunity.domain.model.CommunityMember
 import com.iamamin.tandemcommunity.domain.usecase.GetCommunityMembersUseCase
@@ -18,7 +20,8 @@ import kotlinx.coroutines.launch
 class CommunityViewModel(
     getCommunityMembersUseCase: GetCommunityMembersUseCase,
     private val toggleLikeUseCase: ToggleLikeUseCase,
-    connectivityObserver: ConnectivityObserver
+    connectivityObserver: ConnectivityObserver,
+    private val eventLogger: EventLogger,
 ) : ViewModel() {
 
     val members: Flow<PagingData<CommunityMember>> =
@@ -33,6 +36,7 @@ class CommunityViewModel(
                 .drop(1)
                 .collect { isConnected ->
                     if (isConnected) {
+                        eventLogger.log(AppEvent.ConnectivityRestored)
                         _snackbarEvent.emit(Dismiss)
                     }
                 }
@@ -40,6 +44,7 @@ class CommunityViewModel(
     }
 
     fun onLikeClicked(userId: Long) {
+        eventLogger.log(AppEvent.MemberLikeToggled(userId))
         viewModelScope.launch {
             toggleLikeUseCase(userId)
         }

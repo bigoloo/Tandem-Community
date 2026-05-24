@@ -9,7 +9,8 @@ val uiModel = module {
         CommunityViewModel(
             getCommunityMembersUseCase = get(),
             toggleLikeUseCase = get(),
-            connectivityObserver = get()
+            connectivityObserver = get(),
+            eventLogger = get(),
         )
     }
 }

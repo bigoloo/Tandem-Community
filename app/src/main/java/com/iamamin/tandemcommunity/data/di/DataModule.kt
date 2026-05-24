@@ -1,5 +1,6 @@
 package com.iamamin.tandemcommunity.data.di
 
+import com.iamamin.tandemcommunity.data.analytics.analyticsModule
 import com.iamamin.tandemcommunity.data.connectivity.NetworkConnectivityObserver
 import com.iamamin.tandemcommunity.data.local.di.localModule
 import com.iamamin.tandemcommunity.data.remote.di.remoteModule
@@ -12,7 +13,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
 val dataModule = module {
-    includes(remoteModule, localModule)
+    includes(remoteModule, localModule, analyticsModule)
 
     single<ConnectivityObserver> {
         NetworkConnectivityObserver(context = androidContext())
