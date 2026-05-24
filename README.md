@@ -204,4 +204,3 @@ All values come from the theme — no hardcoded `dp` literals or color hex value
 ### Engineering
 -  **Baseline profiles** — generate a Baseline Profile to reduce startup jank
 -  **Production analytics backend** — swap `LogcatEventLogger` for a real analytics implementation (Firebase, Mixpanel, etc.) behind the same `EventLogger` interface
--  **Accessibility** — audit with TalkBack; ensure all interactive elements have content descriptions and minimum 48 dp touch targets
