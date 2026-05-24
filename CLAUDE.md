@@ -37,15 +37,6 @@ The community list is a paginated feed that combines two sources:
 
 `GetCommunityMembersUseCase` merges these with `combine()` to produce `Flow<PagingData<CommunityMember>>`. This is the only place `CommunityMember` (the presentation model with `isLiked`) is assembled — `CommunityUser` is the network-only model.
 
-## Error Handling Pattern
-
-There are two distinct error paths from `CommunityPagingSource`:
-
-- **Refresh errors** — returned as `LoadResult.Error`, surfaced via `members.loadState.refresh` in the UI
-- **Append errors** (mid-scroll pagination failures) — emitted on `appendErrorFlow` (a `MutableSharedFlow`) to avoid collapsing the already-loaded list; the ViewModel forwards these as snackbar messages with a Retry action
-
-`CommunityError` is a sealed class: `NoConnectivity`, `Timeout`, `HttpError(code)`, `Unknown`.
-
 ## Connectivity Recovery
 
 `CommunityViewModel` observes `ConnectivityObserver.isConnected` with `.drop(1).filter { it }` to detect reconnection events (skipping the initial emission). On reconnect, `CommunityScreen` auto-refreshes or retries depending on whether the current error is a refresh or append failure.

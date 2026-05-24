@@ -84,17 +84,6 @@ CommunityPagingSource          LikedRepositoryImpl
            CommunityScreen (LazyColumn)
 ```
 
-### Error Handling
-
-Two distinct error paths prevent mid-scroll list collapse:
-
-| Error type | How surfaced |
-|---|---|
-| **Refresh** (first load / pull-to-refresh) | `LoadResult.Error` → full-screen `ErrorScreen` |
-| **Append** (mid-scroll pagination) | `appendErrorFlow` SharedFlow → Snackbar with Retry |
-
-`CommunityError` is a sealed class: `NoConnectivity`, `Timeout`, `HttpError(code)`, `Unknown`.
-
 ### Connectivity Recovery
 
 `ConnectivityObserver` emits on every network change. The ViewModel uses `.drop(1).filter { it }` to skip the initial emission and only act on reconnection events, triggering an automatic refresh or retry depending on the current error state.
@@ -216,7 +205,3 @@ All values come from the theme — no hardcoded `dp` literals or color hex value
 -  **Baseline profiles** — generate a Baseline Profile to reduce startup jank
 -  **Production analytics backend** — swap `LogcatEventLogger` for a real analytics implementation (Firebase, Mixpanel, etc.) behind the same `EventLogger` interface
 -  **Accessibility** — audit with TalkBack; ensure all interactive elements have content descriptions and minimum 48 dp touch targets
-
-### Performance
--  **Placeholder items** — enable `enablePlaceholders = true` in `PagingConfig` for skeleton loading
--  **Image pre-fetching** — pre-load images for the next page while the user is scrolling
