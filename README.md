@@ -10,7 +10,6 @@ A production-quality Android app that displays a paginated community feed, lets 
 |:-:|:-:|:-:|:-:|
 | ![Feed](docs/screenshots/feed_light.png) | ![Dark](docs/screenshots/feed_dark.png) | ![Error](docs/screenshots/error.png) | ![Empty](docs/screenshots/empty.png) |
 
-> Place screenshots in `docs/screenshots/` after first run on a device or emulator.
 
 ---
 
@@ -167,18 +166,6 @@ Tests live in `app/src/test/` and cover the data and domain layers. There are no
 - **Structure** — related tests grouped under `// region <method>()` / `// endregion`
 - **Fake builders** — each test file defines its own private `fakeXxx()` functions; no shared fixtures
 - **No mocked databases** — data-layer tests mock the API/DAO interface directly, not a database driver
-
-### Paging tests
-
-```kotlin
-// Repository — trigger multi-page load
-val items = repository.getCommunityUsers().asSnapshot { scrollTo(20) }
-
-// Use case — requires UnconfinedTestDispatcher for combine()
-fun `...`() = runTest(UnconfinedTestDispatcher()) {
-    val result = useCase(backgroundScope).asSnapshot()
-}
-```
 
 ### Coverage by layer
 
