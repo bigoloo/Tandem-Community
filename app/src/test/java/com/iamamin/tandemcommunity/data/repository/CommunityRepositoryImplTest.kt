@@ -23,7 +23,7 @@ class CommunityRepositoryImplTest {
     @Before
     fun setUp() {
         coEvery { api.getCommunity(any()) } returns fakeResponse()
-        repository = CommunityRepositoryImpl(CommunityPagingSource(api))
+        repository = CommunityRepositoryImpl(api)
     }
 
     @Test

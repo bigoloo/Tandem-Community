@@ -5,12 +5,13 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.iamamin.tandemcommunity.data.paging.CommunityPagingSource
+import com.iamamin.tandemcommunity.data.remote.CommunityApi
 import com.iamamin.tandemcommunity.domain.model.CommunityUser
 import com.iamamin.tandemcommunity.domain.repository.CommunityRepository
 import kotlinx.coroutines.flow.Flow
 
 class CommunityRepositoryImpl(
-    private val communityPagingSource: CommunityPagingSource
+    private val communityApi: CommunityApi
 ) : CommunityRepository {
 
     override fun getCommunityUsers(): Flow<PagingData<CommunityUser>> {
@@ -19,7 +20,7 @@ class CommunityRepositoryImpl(
                 pageSize = 20,
                 enablePlaceholders = false
             ),
-            pagingSourceFactory = { communityPagingSource }
+            pagingSourceFactory = { CommunityPagingSource(api = communityApi) }
         ).flow
     }
 }
