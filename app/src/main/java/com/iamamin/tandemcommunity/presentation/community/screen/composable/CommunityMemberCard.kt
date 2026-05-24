@@ -40,7 +40,6 @@ import androidx.compose.ui.tooling.preview.PreviewWrapper
 import coil3.compose.AsyncImage
 import com.iamamin.tandemcommunity.R
 import com.iamamin.tandemcommunity.domain.model.CommunityMember
-import com.iamamin.tandemcommunity.presentation.theme.appTypography
 import com.iamamin.tandemcommunity.presentation.theme.Dimens
 import com.iamamin.tandemcommunity.presentation.theme.Spacing
 import com.iamamin.tandemcommunity.presentation.utils.ThemedPreviewWrapper
@@ -79,7 +78,7 @@ fun CommunityMemberCard(
                 ) {
                     Text(
                         text = member.firstname,
-                        style = appTypography.titleMedium,
+                        style = MaterialTheme.typography.titleMedium,
                     )
                     if (member.isNew) {
                         Text(
@@ -91,7 +90,7 @@ fun CommunityMemberCard(
                                 )
                                 .padding(horizontal = Spacing.sm, vertical = Spacing.xxs),
                             color = MaterialTheme.colorScheme.onTertiaryContainer,
-                            style = appTypography.labelSmall,
+                            style = MaterialTheme.typography.labelSmall,
                         )
                     }
                 }
@@ -100,7 +99,7 @@ fun CommunityMemberCard(
 
                 Text(
                     text = member.topic,
-                    style = appTypography.bodyMedium,
+                    style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis

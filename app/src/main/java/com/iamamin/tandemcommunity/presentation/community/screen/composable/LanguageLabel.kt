@@ -11,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewWrapper
-import com.iamamin.tandemcommunity.presentation.theme.appTypography
 import com.iamamin.tandemcommunity.presentation.theme.Spacing
 import com.iamamin.tandemcommunity.presentation.utils.ThemedPreviewWrapper
 
@@ -20,13 +19,13 @@ fun LanguageLabel(label: String, language: String) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         Text(
             text = label,
-            style = appTypography.labelSmall,
+            style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.tertiary
         )
         Spacer(modifier = Modifier.width(Spacing.xs))
         Text(
             text = language.uppercase(),
-            style = appTypography.labelSmall,
+            style = MaterialTheme.typography.labelSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
     }
