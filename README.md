@@ -6,9 +6,9 @@ A production-quality Android app that displays a paginated community feed, lets 
 
 ## Screenshots
 
-| Community Feed | Dark Mode | Error State | Empty State |
-|:-:|:-:|:-:|:-:|
-| ![Feed](docs/screenshots/feed_light.png) | ![Dark](docs/screenshots/feed_dark.png) | ![Error](docs/screenshots/error.png) | ![Empty](docs/screenshots/empty.png) |
+|               Community Feed                | Dark Mode | Error State |
+|:-------------------------------------------:|:---------:|:-----------:|
+| ![Feed](docs/screenshots/feed_light.png) | ![Dark](docs/screenshots/feed_dark.png) | ![Error](docs/screenshots/error.png) |
 
 
 ---
@@ -213,7 +213,6 @@ All values come from the theme — no hardcoded `dp` literals or color hex value
 -  **Offline-first** — cache the community feed in Room so content is available without connectivity
 
 ### Engineering
--  **CI improvements** — upload test results as artifacts; add coverage reporting
 -  **Baseline profiles** — generate a Baseline Profile to reduce startup jank
 -  **Production analytics backend** — swap `LogcatEventLogger` for a real analytics implementation (Firebase, Mixpanel, etc.) behind the same `EventLogger` interface
 -  **Accessibility** — audit with TalkBack; ensure all interactive elements have content descriptions and minimum 48 dp touch targets
