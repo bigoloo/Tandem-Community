@@ -20,8 +20,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewWrapper
-import androidx.compose.ui.unit.dp
 import com.iamamin.tandemcommunity.R
+import com.iamamin.tandemcommunity.presentation.theme.Spacing
 import com.iamamin.tandemcommunity.presentation.utils.ThemedPreviewWrapper
 
 @Composable
@@ -34,7 +34,7 @@ fun ErrorScreen(
     val context = LocalContext.current
 
     Column(
-        modifier = modifier.padding(24.dp),
+        modifier = modifier.padding(Spacing.xl),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -43,8 +43,8 @@ fun ErrorScreen(
             style = MaterialTheme.typography.titleMedium,
             textAlign = TextAlign.Center
         )
-        Spacer(Modifier.height(16.dp))
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        Spacer(Modifier.height(Spacing.lg))
+        Row(horizontalArrangement = Arrangement.spacedBy(Spacing.sm)) {
             Button(onClick = onRetry) {
                 Text(stringResource(R.string.action_retry))
             }
