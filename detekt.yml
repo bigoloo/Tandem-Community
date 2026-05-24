@@ -29,6 +29,8 @@ naming:
 
 style:
   active: true
+  MaxLineLength:
+    excludes: ['**/test/**', '**/androidTest/**']
   MagicNumber:
     active: true
     ignoreNumbers: ['-1', '0', '1', '2', '10', '20', '100']
