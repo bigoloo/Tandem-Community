@@ -19,7 +19,7 @@ The app follows **Clean Architecture** with three strictly separated layers. Dep
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                    Presentation Layer                    │
+│                    Presentation Layer                   │
 │                                                         │
 │   MainActivity  ──►  TandemCommunityTheme               │
 │        │                                                │
@@ -38,24 +38,24 @@ The app follows **Clean Architecture** with three strictly separated layers. Dep
 └──────────────────────┬──────────────────────────────────┘
                        │  domain interfaces only
 ┌──────────────────────▼──────────────────────────────────┐
-│                      Domain Layer                        │
-│                  (no Android deps)                       │
+│                      Domain Layer                       │
+│                  (no Android deps)                      │
 │                                                         │
 │   GetCommunityMembersUseCase                            │
 │   └── combine(PagingData, likedIds) → CommunityMember   │
 │                                                         │
 │   ToggleLikeUseCase                                     │
 │                                                         │
-│   Models: CommunityMember · CommunityUser · CommunityError│
+│   Models: CommunityMember· CommunityUser· CommunityError│
 │   Interfaces: CommunityRepository · LikedRepository     │
 │               ConnectivityObserver · EventLogger        │
 └──────────────────────┬──────────────────────────────────┘
                        │  implements interfaces
 ┌──────────────────────▼──────────────────────────────────┐
-│                       Data Layer                         │
+│                       Data Layer                        │
 │                                                         │
 │   CommunityRepositoryImpl                               │
-│   └── CommunityPagingSource  ──►  CommunityApi (Retrofit)│
+│   └── CommunityPagingSource  ──► CommunityApi (Retrofit)│
 │        └── UserDto ──► CommunityUser (mapper)           │
 │                                                         │
 │   LikedRepositoryImpl                                   │
