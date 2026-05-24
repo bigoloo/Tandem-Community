@@ -107,16 +107,6 @@ private fun MyComposablePreview() { ... }
 
 **Paging tests** — use `paging-testing`'s `asSnapshot()` to collect a `Flow<PagingData<T>>` into a plain list. Repository tests call `scrollTo(index)` inside the lambda to trigger multi-page loads. Use case tests pass `backgroundScope` (from `runTest`) as the scope argument to the use case.
 
-```kotlin
-// Repository
-val items = repository.getCommunityUsers().asSnapshot { scrollTo(20) }
-
-// Use case (requires UnconfinedTestDispatcher)
-@OptIn(ExperimentalCoroutinesApi::class)
-fun `...`() = runTest(UnconfinedTestDispatcher()) {
-    val result = useCase(backgroundScope).asSnapshot()
-}
-```
 
 **Layer conventions**:
 - *Data layer* — mock the API/DAO, test the repository/paging source logic directly (no DI container).

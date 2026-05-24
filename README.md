@@ -208,19 +208,17 @@ All values come from the theme — no hardcoded `dp` literals or color hex value
 ## Future Improvements
 
 ### Features
-- [ ] **Member detail screen** — tap a card to open a full profile
-- [ ] **Search & filter** — filter by native/learning language
-- [ ] **Match suggestions** — highlight members whose learning language matches the user's native language
-- [ ] **Offline-first** — cache the community feed in Room so content is available without connectivity
+-  **Member detail screen** — tap a card to open a full profile
+-  **Search & filter** — filter by native/learning language
+-  **Offline-first** — cache the community feed in Room so content is available without connectivity
 
 ### Engineering
-- [ ] **ViewModel unit tests** — test connectivity recovery logic and snackbar event emission directly
-- [ ] **UI / screenshot tests** — Compose `ComposeTestRule` or Paparazzi for visual regression
-- [ ] **CI improvements** — upload test results as artifacts; add coverage reporting
-- [ ] **Baseline profiles** — generate a Baseline Profile to reduce startup jank
-- [ ] **Production analytics backend** — swap `LogcatEventLogger` for a real analytics implementation (Firebase, Mixpanel, etc.) behind the same `EventLogger` interface
-- [ ] **Accessibility** — audit with TalkBack; ensure all interactive elements have content descriptions and minimum 48 dp touch targets
+-  **UI / screenshot tests** — Compose `ComposeTestRule` or Paparazzi for visual regression
+-  **CI improvements** — upload test results as artifacts; add coverage reporting
+-  **Baseline profiles** — generate a Baseline Profile to reduce startup jank
+-  **Production analytics backend** — swap `LogcatEventLogger` for a real analytics implementation (Firebase, Mixpanel, etc.) behind the same `EventLogger` interface
+-  **Accessibility** — audit with TalkBack; ensure all interactive elements have content descriptions and minimum 48 dp touch targets
 
 ### Performance
-- [ ] **Placeholder items** — enable `enablePlaceholders = true` in `PagingConfig` for skeleton loading
-- [ ] **Image pre-fetching** — pre-load images for the next page while the user is scrolling
+-  **Placeholder items** — enable `enablePlaceholders = true` in `PagingConfig` for skeleton loading
+-  **Image pre-fetching** — pre-load images for the next page while the user is scrolling
