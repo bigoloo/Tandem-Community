@@ -1,12 +1,8 @@
 package com.iamamin.tandemcommunity.presentation.community.screen
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
@@ -34,15 +30,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.paging.LoadState
 import com.iamamin.tandemcommunity.presentation.theme.Dimens
-import com.iamamin.tandemcommunity.presentation.theme.Spacing
 import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.itemKey
 import com.iamamin.tandemcommunity.R
 import com.iamamin.tandemcommunity.presentation.community.CommunityViewModel
 import com.iamamin.tandemcommunity.presentation.utils.isNoConnectivity
-import com.iamamin.tandemcommunity.presentation.community.screen.composable.CommunityMemberCard
 import com.iamamin.tandemcommunity.presentation.community.screen.composable.EmptyContent
 import com.iamamin.tandemcommunity.presentation.community.screen.composable.ErrorScreen
+import com.iamamin.tandemcommunity.presentation.community.screen.composable.MemberList
 import com.iamamin.tandemcommunity.presentation.utils.toCommunityMessage
 import com.iamamin.tandemcommunity.presentation.utils.SnackbarEvent.Dismiss
 import kotlinx.coroutines.flow.collectLatest
@@ -149,37 +143,12 @@ fun CommunityScreen(
                     if (members.itemCount == 0) {
                         EmptyContent(modifier = Modifier.fillMaxSize())
                     } else {
-                        LazyColumn(
-                            state = listState,
+                        MemberList(
+                            members = members,
+                            listState = listState,
+                            onLikeClicked = { viewModel.onLikeClicked(it) },
                             modifier = Modifier.fillMaxSize(),
-                            contentPadding = PaddingValues(Spacing.lg),
-                            verticalArrangement = Arrangement.spacedBy(Spacing.sm)
-                        ) {
-                            items(
-                                count = members.itemCount,
-                                key = members.itemKey { it.id }
-                            ) { index ->
-                                members[index]?.let { member ->
-                                    CommunityMemberCard(
-                                        member = member,
-                                        onLikeClicked = { viewModel.onLikeClicked(member.id) }
-                                    )
-                                }
-                            }
-
-                            if (members.loadState.append is LoadState.Loading) {
-                                item {
-                                    Box(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        contentAlignment = Alignment.Center
-                                    ) {
-                                        CircularProgressIndicator(
-                                            modifier = Modifier.padding(Spacing.lg)
-                                        )
-                                    }
-                                }
-                            }
-                        }
+                        )
                     }
                 }
             }
