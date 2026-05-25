@@ -15,7 +15,6 @@ import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -29,7 +28,7 @@ class GetCommunityMembersUseCaseTest {
     private val useCase = GetCommunityMembersUseCase(communityRepository, likedRepository)
 
     @Test
-    fun `maps user fields and picks first native and learn`() = runTest(UnconfinedTestDispatcher()) {
+    fun `maps user fields and picks first native and learn`() = runTest {
         val user = userFixture(
             id = 1,
             firstname = "Amin",
@@ -62,7 +61,7 @@ class GetCommunityMembersUseCaseTest {
     }
 
     @Test
-    fun `isLiked is true when user id is in liked ids`() = runTest(UnconfinedTestDispatcher()) {
+    fun `isLiked is true when user id is in liked ids`() = runTest {
         every { communityRepository.getCommunityUsers() } returns pagingFlowOf(userFixture(id = 1))
         every { likedRepository.observeLikedUserIds() } returns flowOf(setOf(1))
 
@@ -72,7 +71,7 @@ class GetCommunityMembersUseCaseTest {
     }
 
     @Test
-    fun `isLiked is false when user id is not in liked ids`() = runTest(UnconfinedTestDispatcher()) {
+    fun `isLiked is false when user id is not in liked ids`() = runTest {
         every { communityRepository.getCommunityUsers() } returns pagingFlowOf(userFixture(id = 1))
         every { likedRepository.observeLikedUserIds() } returns flowOf(setOf(2, 3))
 
@@ -82,8 +81,12 @@ class GetCommunityMembersUseCaseTest {
     }
 
     @Test
-    fun `isNew is true when referenceCnt is zero`() = runTest(UnconfinedTestDispatcher()) {
-        every { communityRepository.getCommunityUsers() } returns pagingFlowOf(userFixture(referenceCnt = 0))
+    fun `isNew is true when referenceCnt is zero`() = runTest {
+        every { communityRepository.getCommunityUsers() } returns pagingFlowOf(
+            userFixture(
+                referenceCnt = 0
+            )
+        )
         every { likedRepository.observeLikedUserIds() } returns flowOf(emptySet())
 
         val result = useCase(backgroundScope).asSnapshot()
@@ -92,8 +95,12 @@ class GetCommunityMembersUseCaseTest {
     }
 
     @Test
-    fun `isNew is false when referenceCnt is greater than zero`() = runTest(UnconfinedTestDispatcher()) {
-        every { communityRepository.getCommunityUsers() } returns pagingFlowOf(userFixture(referenceCnt = 1))
+    fun `isNew is false when referenceCnt is greater than zero`() = runTest {
+        every { communityRepository.getCommunityUsers() } returns pagingFlowOf(
+            userFixture(
+                referenceCnt = 1
+            )
+        )
         every { likedRepository.observeLikedUserIds() } returns flowOf(emptySet())
 
         val result = useCase(backgroundScope).asSnapshot()
@@ -102,7 +109,7 @@ class GetCommunityMembersUseCaseTest {
     }
 
     @Test
-    fun `maps multiple users preserving order and per-item liked state`() = runTest(UnconfinedTestDispatcher()) {
+    fun `maps multiple users preserving order and per-item liked state`() = runTest {
         every { communityRepository.getCommunityUsers() } returns pagingFlowOf(
             userFixture(id = 1), userFixture(id = 2), userFixture(id = 3)
         )
@@ -115,7 +122,7 @@ class GetCommunityMembersUseCaseTest {
     }
 
     @Test
-    fun `emits empty list when no users`() = runTest(UnconfinedTestDispatcher()) {
+    fun `emits empty list when no users`() = runTest {
         every { communityRepository.getCommunityUsers() } returns pagingFlowOf()
         every { likedRepository.observeLikedUserIds() } returns flowOf(emptySet())
 
@@ -129,6 +136,7 @@ class GetCommunityMembersUseCaseTest {
             object : PagingSource<Int, CommunityUser>() {
                 override suspend fun load(params: LoadParams<Int>): LoadResult<Int, CommunityUser> =
                     LoadResult.Page(data = users.toList(), prevKey = null, nextKey = null)
+
                 override fun getRefreshKey(state: PagingState<Int, CommunityUser>): Int? = null
             }
         }.flow
