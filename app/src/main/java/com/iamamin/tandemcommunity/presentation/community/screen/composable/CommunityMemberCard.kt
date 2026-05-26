@@ -1,21 +1,24 @@
 package com.iamamin.tandemcommunity.presentation.community.screen.composable
 
 import android.content.res.Configuration
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.spring
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material.icons.outlined.ThumbUp
 import androidx.compose.material3.Card
@@ -24,8 +27,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,7 +40,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.tooling.preview.PreviewWrapper
-import coil3.compose.AsyncImage
+import coil3.compose.SubcomposeAsyncImage
 import com.iamamin.tandemcommunity.R
 import com.iamamin.tandemcommunity.domain.model.CommunityMember
 import com.iamamin.tandemcommunity.presentation.theme.Dimens
@@ -58,16 +61,36 @@ fun CommunityMemberCard(
             modifier = Modifier.padding(Spacing.md),
             horizontalArrangement = Arrangement.spacedBy(Spacing.md)
         ) {
-            AsyncImage(
+            SubcomposeAsyncImage(
                 model = member.pictureUrl,
                 contentDescription = stringResource(
-                    R.string.member_photo_description,
-                    member.firstname
+                    R.string.member_photo_description, member.firstname
                 ),
                 modifier = Modifier
                     .size(Dimens.avatarSize)
                     .clip(RoundedCornerShape(Dimens.avatarCornerRadius)),
-                contentScale = ContentScale.Crop
+                contentScale = ContentScale.Crop,
+                loading = {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(MaterialTheme.colorScheme.surfaceVariant)
+                    )
+                },
+                error = {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(MaterialTheme.colorScheme.surfaceVariant),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Person,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
             )
 
             Column(modifier = Modifier.weight(1f)) {
@@ -124,25 +147,21 @@ fun CommunityMemberCard(
                     }
 
                     val likeScale by animateFloatAsState(
-                        targetValue = if (member.isLiked) 1f else 0.85f,
-                        animationSpec = spring(
+                        targetValue = if (member.isLiked) 1f else 0.85f, animationSpec = spring(
                             dampingRatio = Spring.DampingRatioMediumBouncy,
                             stiffness = Spring.StiffnessMedium
-                        ),
-                        label = "likeScale"
+                        ), label = "likeScale"
                     )
                     val likeTint by animateColorAsState(
                         targetValue = if (member.isLiked) {
                             MaterialTheme.colorScheme.primary
                         } else {
                             MaterialTheme.colorScheme.onSurfaceVariant
-                        },
-                        label = "likeTint"
+                        }, label = "likeTint"
                     )
 
                     IconButton(
-                        onClick = onLikeClicked,
-                        modifier = Modifier.size(Dimens.likeButtonSize)
+                        onClick = onLikeClicked, modifier = Modifier.size(Dimens.likeButtonSize)
                     ) {
                         Icon(
                             imageVector = if (member.isLiked) {
@@ -193,14 +212,10 @@ private class CommunityMemberCardPreviewPreviewParameterProvider :
 }
 
 @Preview(
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-    name = "DefaultPreviewDark",
-    apiLevel = 34
+    uiMode = Configuration.UI_MODE_NIGHT_YES, name = "DefaultPreviewDark", apiLevel = 34
 )
 @Preview(
-    uiMode = Configuration.UI_MODE_NIGHT_NO,
-    name = "DefaultPreviewLight",
-    apiLevel = 34
+    uiMode = Configuration.UI_MODE_NIGHT_NO, name = "DefaultPreviewLight", apiLevel = 34
 )
 @Preview(showBackground = true, apiLevel = 34)
 @Composable
@@ -209,7 +224,5 @@ private fun CommunityMemberCardPreview(
     @PreviewParameter(CommunityMemberCardPreviewPreviewParameterProvider::class) communityMember: CommunityMember
 ) {
     CommunityMemberCard(
-        member = communityMember,
-        onLikeClicked = {}
-    )
+        member = communityMember, onLikeClicked = {})
 }
